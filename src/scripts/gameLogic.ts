@@ -135,6 +135,7 @@ export class Game {
         this.dealer.resetHand();
         this.deck = new Deck();
         this.deck.shuffle();
+        this.gameState = 'init';
     }
 
     roundScoreboard(): void {
@@ -156,7 +157,7 @@ export class Game {
 
         this.resetGame();
         this.roundNumber++;
-        
+
         //Round starts by dealing two cards to each player and dealer
         this.players.forEach(player => player.drawCards(this.deck,2));
         this.dealer.drawCards(this.deck,2);
