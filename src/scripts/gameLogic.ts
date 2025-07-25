@@ -1,6 +1,4 @@
-import { error } from "console";
 import { Deck, Card } from "./cardDeck";
-//const prompt = require("prompt-sync")();
 
 type winState = 'won' | 'lost' | 'drew' | 'null';
 export type GameState = 'init' | 'playerTurn' | 'gameEnd';
@@ -31,10 +29,6 @@ export class Player {
 
         //draw cards from the deck and log them
         let dealtCards = deck.dealCards(numCards);
-
-        dealtCards.forEach(card => {
-            console.log(this.name + ' drew a ' + card.toString());
-        });
         
         //Add the cards to the player's hand and check their new score
         this.hand = this.hand.concat(dealtCards);
@@ -42,18 +36,9 @@ export class Player {
         //Update the player's score and log if bust or blackjack
         this.checkScore();
 
-        if (this.isBust) {
-            console.log(this.name + ' is bust!');
-        }
-
-        if (this.isBlackjack) {
-            console.log(this.name + ' is blackjack!');
-        }
-
     }
 
     //Calculate the player's hand score
-    //TO DO: Write Unit Test
     private checkScore(): void {
 
         if(this.isBlackjack || this.isBust) {
@@ -96,8 +81,6 @@ export class Player {
         else if (this.score === 21) {
             this.isBlackjack = true;
         }
-
-        console.log('   = ' + this.score + ' (' + this.name + ')')
     }
 
     public setWinState(state: winState): void {
@@ -121,10 +104,7 @@ export class Game {
     public gameState: GameState = 'init';
 
     public deck: Deck = new Deck();
-    public roundNumber: number = 1;
-
-    constructor() {
-    }
+    public roundNumber: number = 0;
 
     addPlayer(player: Player): void {
         this.players.push(player);
@@ -138,7 +118,7 @@ export class Game {
         this.gameState = 'init';
 
         if(hardReset) {
-            this.roundNumber = 1;
+            this.roundNumber = 0;
             this.players.forEach(player => player.handsWon = 0);
         }
     }
@@ -146,6 +126,7 @@ export class Game {
     public startRound(): void {
 
         this.resetGame();
+        this.roundNumber++;
 
         //Round starts by dealing two cards to each player and dealer
         this.players.forEach(player => player.drawCards(this.deck,2));
@@ -156,6 +137,7 @@ export class Game {
 
     public hitPlayer(player: Player): void {
 
+        //Technically shouldn't be possible due to button disable but check anyway
         if (player.isBust || player.isBlackjack) {
             return;
         }
@@ -169,96 +151,12 @@ export class Game {
         this.gameState = 'gameEnd';
         this.dealersTurn();
         this.calculateWinners();
-        this.roundNumber++;
-    }
-    
-    public playRound(): void {
-        
-        this.resetGame();
-        this.roundNumber++;
-
-        console.log('----------');
-        console.log('**Round ' + this.roundNumber + '**');
-
-        //Round starts by dealing two cards to each player and dealer
-        console.log('--- INITIAL DRAW ---');
-        this.players.forEach(player => player.drawCards(this.deck,2));
-        this.dealer.drawCards(this.deck,2);
-
-        //Players' turns
-        console.log('--- PLAYER TURNS ---');
-        this.players.forEach(player =>{
-            this.playerTurn(player);
-            //Only add spacer if it's not the last player
-            if(!(this.players.findIndex(p => p === player)+1 === this.players.length)) {
-                console.log('--');
-            }
-        })
-
-        //Dealer's Turn
-        console.log("--- DEALER'S TURN ---");
-        this.dealersTurn();
-
-        this.calculateWinners();
-
-        console.log('----------');
-
-    }
-
-    private playerTurn(player: Player): void {
-
-        if(player.isCPU) {
-            while(player.score < 17){
-                player.drawCards(this.deck,1);
-            }
-            if (!player.isBust && !player.isBlackjack) {
-                console.log(player.name + ' Stands on ' + player.score + '.');
-            }      
-        }
-
-        else {
-
-            let continueTurn = true;
-
-            console.log('Your turn (' + player.name + ')' + ' - ' + player.score + '.')
-
-            while (continueTurn) {
-
-                //Ask player to hit or stand
-                if (prompt('Hit (y) or Stand?: ') === 'y') {
-                    player.drawCards(this.deck, 1);
-                }
-                else {
-                    continueTurn = false;
-                }
-
-                //If player is bust or has blackjack auto-end their turn.
-                if(player.isBust || player.isBlackjack) {
-                    continueTurn = false;
-                }
-
-            }
-
-            //Log 'stands' if turn ends without bust or blackjack.
-            if (!player.isBust && !player.isBlackjack) {
-                console.log(player.name + ' stands on ' + player.score + '.');
-            }
-        }      
     }
 
     private dealersTurn(): void {
 
-        //In case dealer gets blackjack on the first cards (note bust is not possible)
-        if (this.dealer.isBlackjack) {
-            console.log('Dealer is blackjack!')
-            return;
-        }
-
         while (this.dealer.score < 17) {
             this.dealer.drawCards(this.deck, 1);
-        }
-        if (!this.dealer.isBust && !this.dealer.isBlackjack) {
-            console.log('Dealer Stands on ' + this.dealer.score + '.')
         }
     }
 

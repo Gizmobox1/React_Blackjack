@@ -1,109 +1,129 @@
-import Image from "next/image";
-import { Button } from "@/components/ui/button"
-import { TableDemo } from "./MBcomponents/shadcnComps";
-import Link from 'next/link'
+"use client"
 
-export default function Home() {
+import React, { useState } from 'react';
+import { Card } from "@/scripts/cardDeck";
+import { Game, GameState, Player } from "@/scripts/gameLogic";
+import { PlayerProp} from "../components/ui/blackjackComponents";
+import Button from '@mui/material/Button';
+
+export default function page () {
+
+  const [game, setGame] = useState<Game>(() => {
+    const gameInstance = new Game();
+    const thePlayer = new Player("You", false, false);
+    gameInstance.addPlayer(thePlayer);
+    return gameInstance;
+  });
+
+  // Helper to get the main player reference from game state
+  const mainPlayer = game.players[0];
+
+  const [gameState, setGameState] = useState<GameState>(game.gameState);
+  const [playerHand, setPlayerHand] = useState<Card[]>(mainPlayer.hand);
+  const [dealerHand, setDealerHand] = useState<Card[]>(game.dealer.hand);
+
+  function handleStartGame () {
+    game.startRound();
+    setGameState(game.gameState);
+    setPlayerHand(mainPlayer.hand);
+  }
+
+  function handleResetGame() {
+    game.resetGame(true);
+    setGameState(game.gameState);
+    setPlayerHand(mainPlayer.hand);
+  }
+
+  function handleHitPlayer() {
+    game.hitPlayer(mainPlayer);
+    setPlayerHand(mainPlayer.hand);
+  }
+
+  function handleStandPlayer() {
+    game.standPlayer(mainPlayer);
+    setGameState(game.gameState);
+  }
+
+  //HTML Output
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    <div className="flex flex-col items-center justify-center min-h-screen gap-y-2">
+      <h1 className="text-4xl font-bold">React Blackjack</h1>
+      <p className="text-lg mb-4">A game of Blackjack built with Next.js, React, and Tailwind CSS.</p>
 
-    <Link href="/game"> <Button> Link to Game Page </Button></Link>
+      {game.gameState === "init" && <Button variant='contained' onClick={handleStartGame} className="mb-8">Start Game</Button>}
 
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+      {game.gameState !== "init" && <h3 className='font-bold underline'>Round {game.roundNumber}</h3>}  
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <div className="flex flex-row items-center justify-center space-x-8">
+        {game.dealer.hand.length > 0 && (
+            <PlayerProp player={game.dealer} />
+        )}
+
+        {game.players.map((player, index) => (
+            <div key={index}>
+                {player.hand.length > 0 && (<PlayerProp player={player}/>)}
+            </div>
+        ))}
+      </div>
+
+      {message()}
+
+      <div className="flex flex-row items-center justify-center gap-x-4">
+        {game.gameState === "playerTurn" && (
+            <>
+                {mainPlayer.isBust || mainPlayer.isBlackjack ? 
+                <Button variant='contained' disabled>Hit</Button> :
+                <Button variant='contained' onClick={handleHitPlayer} className="mb-8">Hit</Button>
+                }
+                <Button variant='contained'onClick={handleStandPlayer} className="mb-8">Stand</Button>
+            </>
+        )}
+        {game.gameState === "gameEnd" && (
+          <div className='flex flex-col items-center justify-center gap-y-2'>
+          <p className='italic text-mb'>Rounds Won: {mainPlayer.handsWon}/{game.roundNumber}</p>          
+          <Button variant='contained' onClick={handleStartGame} className="">Play Again</Button>
+          </div>
+        )}
+
+      </div>
+
+      {game.gameState !== "init" && <Button onClick={handleResetGame} className="">Reset</Button>}
+
+
     </div>
-  );
+  )
+
+  function message() {
+
+    function formMessage(msg : string, css: string = "text-mb italic") {
+
+      return <p className={css}>{msg}</p>
+
+    }
+
+    switch(game.gameState) {
+
+      case "init":
+        return formMessage("");
+ 
+      case "playerTurn":
+
+        if(mainPlayer.isBlackjack) {
+          return formMessage("Blackjack! Well done!", "text-mb italic font-bold")
+        }
+        else if (mainPlayer.isBust) {
+          return formMessage("Bust! Too bad.", "text-mb italic font-bold")
+        }
+        else {
+          return formMessage("Your Turn! Hit or Stand?")
+        }
+        
+      default:
+        let winState = mainPlayer.getWinState().toUpperCase();
+        return formMessage(mainPlayer.name + ' ' + winState as string + '!', "text-mb italic font-bold")
+
+    }
+
+  }
+
 }

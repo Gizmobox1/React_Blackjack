@@ -81,5 +81,3 @@ export class Deck {
     }
 
 }
-
-//console.log('cardDeck.ts initialised')

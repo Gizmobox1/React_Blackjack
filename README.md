@@ -1,8 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# React Blackjack
+
+A simple Blackjack game built with Next.js, React, TypeScript, and Tailwind CSS. This project demonstrates component-based architecture and state management in a modern web application.
+
+## Features
+
+- **Classic Blackjack Rules**: Play against an automated dealer.
+- **Hit & Stand**: Make decisions to improve your hand or stand with what you have.
+- **Automatic Scoring**: The game automatically calculates hand values, including handling Aces as 1 or 11.
+- **Win/Loss/Draw Tracking**: See the outcome of each round.
+- **Continuous Play**: Start a new round with a single click.
+- **Game Reset**: Start over from scratch at any time.
+
+## Tech Stack
+
+- **Framework**: Next.js
+- **Language**: TypeScript
+- **UI Library**: React
+- **Styling**: Tailwind CSS
+- **UI Components**: Material UI for buttons.
+
+## How to Play
+
+1.  Click **Start Game** to be dealt your first two cards.
+2.  Choose to **Hit** to receive another card or **Stand** to keep your current hand.
+3.  The dealer will then play their turn according to standard Blackjack rules (hitting until their score is 17 or higher).
+4.  The winner is determined, and you can choose to **Play Again**.
 
 ## Getting Started
 
-First, run the development server:
+First, clone the repository and install the dependencies:
+
+```bash
+git clone <repository-url>
+cd <repository-name>
+npm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -12,7 +46,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -29,8 +63,6 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Icon Attribution
+Poker icons created by DinosoftLabs - Flaticon
+"https://www.flaticon.com/free-icons/poker"
