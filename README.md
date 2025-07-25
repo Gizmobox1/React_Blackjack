@@ -2,6 +2,9 @@
 
 A simple Blackjack game built with Next.js, React, TypeScript, and Tailwind CSS. This project demonstrates component-based architecture and state management in a modern web application.
 
+### Preview:
+![alt text](preview.png "Preview Image")
+
 ## Features
 
 - **Classic Blackjack Rules**: Play against an automated dealer.
