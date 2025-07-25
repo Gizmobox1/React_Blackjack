@@ -121,7 +121,7 @@ export class Game {
     public gameState: GameState = 'init';
 
     public deck: Deck = new Deck();
-    public roundNumber: number = 0;
+    public roundNumber: number = 1;
 
     constructor() {
     }
@@ -130,19 +130,22 @@ export class Game {
         this.players.push(player);
     }
 
-    resetGame(): void {
+    resetGame(hardReset: boolean = false): void {
         this.players.forEach(player => player.resetHand());
         this.dealer.resetHand();
         this.deck = new Deck();
         this.deck.shuffle();
         this.gameState = 'init';
+
+        if(hardReset) {
+            this.roundNumber = 1;
+            this.players.forEach(player => player.handsWon = 0);
+        }
     }
 
     public startRound(): void {
 
-
         this.resetGame();
-        this.roundNumber++;
 
         //Round starts by dealing two cards to each player and dealer
         this.players.forEach(player => player.drawCards(this.deck,2));
@@ -164,9 +167,10 @@ export class Game {
     public standPlayer(player: Player): void {
 
         this.gameState = 'gameEnd';
-
+        this.dealersTurn();
+        this.calculateWinners();
+        this.roundNumber++;
     }
-
     
     public playRound(): void {
         
