@@ -1,33 +1,8 @@
 
-import { Button } from "@/components/ui/button";
+import { Button as ShadButton } from "@/components/ui/button";
+import Button from '@mui/material/Button';
 import { Deck, Card } from "@/scripts/cardDeck";
 import { Game, GameState, Player } from "@/scripts/gameLogic";
-
-export function ControlPanel({gameState, onStartGame}: {gameState: GameState, onStartGame: () => void}) {
-
-    let startButton = <Button onClick={onStartGame} className="mb-8">Start Game</Button>
-
-    let otherButtons = 
-        <div className="flex flex-row space-x-2">
-            <Button className="mb-8">Hit</Button>
-            <Button className="mb-8">Stand</Button>
-        </div>
-
-    console.log(gameState)
-    let content;
-
-    switch (gameState) {
-        case "init": 
-            return (startButton)
-
-        case "playerTurn":
-            return otherButtons;
-
-        default:
-            console.log('not working');
-            return '';
-    }
-}
 
 
 export function HandProp({player, hand} : {player: Player, hand: Card[]}) {

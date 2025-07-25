@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { TableDemo } from "../MBcomponents/shadcnComps";
 import { Card } from "@/scripts/cardDeck";
 import { Game, GameState, Player } from "@/scripts/gameLogic";
-import { ControlPanel, PlayerProp, HandProp} from "../MBcomponents/blackjackComponents";
-import { Button } from '@/components/ui/button';
+import { PlayerProp, HandProp} from "../MBcomponents/blackjackComponents";
+import Button from '@mui/material/Button';
 
 
 //let testCard = new Card("A", "Hearts");
@@ -52,16 +52,17 @@ export default function page () {
     setPlayerHand(mainPlayer.hand);
   }
 
+  //HTML Output
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-4xl font-bold mb-8">Blackjack Game</h1>
       <p className="text-lg mb-4">A game of Blackjack built with Next.js and Tailwind CSS.</p>
       <p className="text-md mb-8">Hit the 'Start Game' button to start!</p>
 
-      {game.gameState === "init" && <Button onClick={handleStartGame} className="mb-8">Start Game</Button>}
-      {game.gameState !== "init" && <Button onClick={handleResetGame} className="mb-8">Reset Game</Button>}
+      {game.gameState === "init" && <Button variant='contained' onClick={handleStartGame} className="mb-8">Start Game</Button>}
+      {game.gameState !== "init" && <Button variant='contained' onClick={handleResetGame} className="mb-8">Reset Game</Button>}
 
-      <div className="flex flex-row items-center justify-center space-x-8">
+      <div className="flex flex-row items-center justify-center space-x-8 py-4">
         {game.dealer.hand.length > 0 && (
             <PlayerProp player={game.dealer} />
         )}
@@ -73,11 +74,14 @@ export default function page () {
         ))}
       </div>
 
-      <div className="flex flex-row items-center justify-center space-x-8 py-4">
+      <div className="flex items-center justify-center gap-x-2">
         {game.gameState === "playerTurn" && (
             <>
-                <Button onClick={handleHitPlayer} className="mb-8">Hit</Button>
-                <Button onClick={handleStandPlayer} className="mb-8">Stand</Button>
+                {mainPlayer.isBust || mainPlayer.isBlackjack ? 
+                <Button variant='contained' disabled>Hit</Button> :
+                <Button variant='contained' onClick={handleHitPlayer} className="mb-8">Hit</Button>
+                }
+                <Button variant='contained'onClick={handleStandPlayer} className="mb-8">Stand</Button>
             </>
         )}
       </div>
