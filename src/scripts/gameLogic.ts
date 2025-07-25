@@ -138,20 +138,6 @@ export class Game {
         this.gameState = 'init';
     }
 
-    roundScoreboard(): void {
-        console.log('--- ROUND ' + this.roundNumber + ' SCORES ---')
-        console.log('Dealer: ' + this.dealer.score);
-        this.players.forEach(player => console.log(player.name + ': ' + player.score + ' (' + player.getWinState() + ')'));
-    }
-
-    gameScoreboard(): void {
-    
-        console.log('--- GAME SCORES ---')
-        this.players.forEach(player => console.log(player.name + ' has won ' + player.handsWon + ' hands.'))
-        console.log('----------');
-    
-    }
-
     public startRound(): void {
 
 
@@ -165,6 +151,23 @@ export class Game {
         this.gameState = 'playerTurn';
     }
 
+    public hitPlayer(player: Player): void {
+
+        if (player.isBust || player.isBlackjack) {
+            return;
+        }
+
+        player.drawCards(this.deck,1);
+
+    }
+
+    public standPlayer(player: Player): void {
+
+        this.gameState = 'gameEnd';
+
+    }
+
+    
     public playRound(): void {
         
         this.resetGame();
@@ -193,7 +196,6 @@ export class Game {
         this.dealersTurn();
 
         this.calculateWinners();
-        this.roundScoreboard();
 
         console.log('----------');
 

@@ -29,7 +29,24 @@ export function ControlPanel({gameState, onStartGame}: {gameState: GameState, on
     }
 }
 
-export function HandProp({player} : {player: Player}) {
+
+export function HandProp({player, hand} : {player: Player, hand: Card[]}) {
+
+   return (
+    <div className="flex flex-col items-center justify-center space-y-2">
+        <h2 className="text-xl font-semibold">{player.name}</h2>
+        <div className="flex flex-row -space-x-6">
+            {hand.map((card, index) => (
+                <CardProp key={index} card={card} />
+            ))}
+        </div>
+        <h3>({player.score}) {player.isBlackjack ? "- Blackjack!" : " "}{player.isBust ? "- Bust!" : " "}</h3>
+    </div>
+  );   
+
+}
+
+export function PlayerProp({player} : {player: Player}) {
 
   return (
     <div className="flex flex-col items-center justify-center space-y-2">
