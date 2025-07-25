@@ -123,8 +123,6 @@ export class Game {
     public deck: Deck = new Deck();
     public roundNumber: number = 0;
 
-
-
     constructor() {
     }
 
@@ -151,6 +149,19 @@ export class Game {
         this.players.forEach(player => console.log(player.name + ' has won ' + player.handsWon + ' hands.'))
         console.log('----------');
     
+    }
+
+    public startRound(): void {
+
+
+        this.resetGame();
+        this.roundNumber++;
+        
+        //Round starts by dealing two cards to each player and dealer
+        this.players.forEach(player => player.drawCards(this.deck,2));
+        this.dealer.drawCards(this.deck,2);
+
+        this.gameState = 'playerTurn';
     }
 
     public playRound(): void {

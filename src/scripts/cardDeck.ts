@@ -1,4 +1,4 @@
-const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
+const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 const suits = ['Clubs', 'Diamonds', 'Hearts', 'Spades'];
 
 type Rank = typeof ranks[number];
@@ -26,12 +26,12 @@ export class Card {
 
     getCardValue(): number {
 
-        const faceCards = ['Jack', 'Queen', 'King'];
+        const faceCards = ['J', 'Q', 'K'];
 
         if(faceCards.includes(this.rank)) {
             return 10;
         }
-        else if (this.rank === 'Ace') {
+        else if (this.rank === 'A') {
             return 11;
         }
         else {
