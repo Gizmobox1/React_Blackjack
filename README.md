@@ -1,6 +1,6 @@
 # React Blackjack
 
-A simple Blackjack game built with Next.js, React, TypeScript, and Tailwind CSS. This project demonstrates component-based architecture and state management in a modern web application.
+A simple Blackjack game built with Next.js, React, TypeScript, and Tailwind CSS. My first attempt at typescript, react, and tailwind!
 
 ## Features
 
