@@ -6,6 +6,9 @@ import { Game, GameState, Player } from "@/scripts/gameLogic";
 import { PlayerProp} from "../components/ui/blackjackComponents";
 import Button from '@mui/material/Button';
 
+import { motion } from "motion/react"
+import { ClassNames } from '@emotion/react';
+
 export default function page () {
 
   const [game, setGame] = useState<Game>(() => {
@@ -127,3 +130,9 @@ export default function page () {
   }
 
 }
+
+
+
+
+
+
