@@ -3,11 +3,12 @@
 import React, { useState } from 'react';
 import { Card } from "@/scripts/cardDeck";
 import { Game, GameState, Player } from "@/scripts/gameLogic";
-import { PlayerProp} from "../components/ui/blackjackComponents";
+import { PlayerProp, HandProp} from "../components/ui/blackjackComponents";
 import Button from '@mui/material/Button';
 
 import { motion } from "motion/react"
 import { ClassNames } from '@emotion/react';
+import {Variants} from '@/components/ui/motionExamples';
 
 export default function page () {
 
@@ -20,21 +21,39 @@ export default function page () {
 
   // Helper to get the main player reference from game state
   const mainPlayer = game.players[0];
+  const dealer = game.dealer;
 
   const [gameState, setGameState] = useState<GameState>(game.gameState);
   const [playerHand, setPlayerHand] = useState<Card[]>(mainPlayer.hand);
   const [dealerHand, setDealerHand] = useState<Card[]>(game.dealer.hand);
 
   function handleStartGame () {
-    game.startRound();
+
+    game.gameState="init";
     setGameState(game.gameState);
+
+    game.resetGame();
+    game.roundNumber++;
+
+
+    game.gameState = "playerTurn";
+    setGameState(game.gameState);
+
+    //Deal initial 2 cards to each player (Animations only work properly when run asynchronously!?)
+    setTimeout(() => {
+    mainPlayer.drawCards(game.deck,2);
+    dealer.drawCards(game.deck,2);
+    setDealerHand(dealer.hand);
     setPlayerHand(mainPlayer.hand);
+    },0)
+    
   }
 
   function handleResetGame() {
     game.resetGame(true);
     setGameState(game.gameState);
     setPlayerHand(mainPlayer.hand);
+    setDealerHand(game.dealer.hand);
   }
 
   function handleHitPlayer() {
@@ -57,17 +76,19 @@ export default function page () {
 
       {game.gameState !== "init" && <h3 className='font-bold underline'>Round {game.roundNumber}</h3>}  
 
+      #PlayerProp
       <div className="flex flex-row items-center justify-center space-x-8">
-        {game.dealer.hand.length > 0 && (
-            <PlayerProp player={game.dealer} />
-        )}
-
-        {game.players.map((player, index) => (
-            <div key={index}>
-                {player.hand.length > 0 && (<PlayerProp player={player}/>)}
-            </div>
-        ))}
+        {game.dealer.hand.length > 0 && (<PlayerProp player={dealer} />)}
+        {mainPlayer.hand.length > 0 && (<PlayerProp player={mainPlayer}/>)}
       </div>
+
+      #HandProp
+      <div className="flex flex-row items-center justify-center space-x-8">
+        <HandProp hand={dealerHand} />
+        <HandProp hand={playerHand} />
+      </div>
+
+      {/* <Variants /> */}
 
       {message()}
 

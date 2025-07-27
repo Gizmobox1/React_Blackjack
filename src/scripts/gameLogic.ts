@@ -1,3 +1,5 @@
+"use client"
+
 import { Deck, Card } from "./cardDeck";
 
 type winState = 'won' | 'lost' | 'drew' | 'null';
@@ -123,17 +125,20 @@ export class Game {
         }
     }
 
-    public startRound(): void {
+    //Replaced by 'handleStartGame' in page.tsx
+/*     public startRound(): void {
 
         this.resetGame();
         this.roundNumber++;
 
         //Round starts by dealing two cards to each player and dealer
+        setTimeout(() => {
         this.players.forEach(player => player.drawCards(this.deck,2));
         this.dealer.drawCards(this.deck,2);
+        }, 0);
 
         this.gameState = 'playerTurn';
-    }
+    } */
 
     public hitPlayer(player: Player): void {
 

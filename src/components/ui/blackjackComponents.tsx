@@ -3,8 +3,14 @@ import { Card } from "@/scripts/cardDeck";
 import { Player } from "@/scripts/gameLogic";
 import { slideLeft } from "@/animations/ui/myAnimations";
 import { motion } from "motion/react"
+import { duration } from "@mui/material";
 
 export function PlayerProp({player} : {player: Player}) {
+
+  const cardAnimVariants ={
+    initial: { opacity: 0, scale: 2, x: 100 },
+    animate: { opacity: 1, scale: 1, x: 0 },
+  }
 
   return (
     <div className="flex flex-col items-center justify-center space-y-2">
@@ -21,10 +27,7 @@ export function PlayerProp({player} : {player: Player}) {
           {player.hand.map((card, index) => (
             <motion.div
               key={index}
-              variants={{
-                initial: { opacity: 0, scale: 2, x: 100 },
-                animate: { opacity: 1, scale: 1, x: 0 }
-              }}
+              variants={cardAnimVariants}
               transition={{
                 duration: 0.4,
                 scale: { type: "tween", visualDuration: 0.4 }
@@ -40,6 +43,37 @@ export function PlayerProp({player} : {player: Player}) {
   );
 }
 
+export function HandProp({ hand }: { hand: Card[] }) {
+
+  const handVariants = {
+    animate: { transition: { staggerChildren: 0.2 } },
+  }
+
+  const cardVariants ={
+    initial: {opacity: 0, scale: 2, x: 100},
+    animate: {opacity: 1, scale: 1, x: 0, transition: {duration: 0.4, scale: {type: "tween", visualDuration: 0.4}}},
+  }
+
+  return (
+    <motion.div
+      className="flex flex-row -space-x-6"
+      variants={handVariants}
+      initial="initial"
+      animate="animate"
+      >
+        {hand.map((card, index) => (
+          <motion.div
+            key={index}
+            variants={cardVariants}
+          >
+            <CardProp card={card} />
+          </motion.div>
+        ))}
+    </motion.div> 
+  )  
+
+}
+
 export function CardProp({ card }: { card: Card }) {
     let suit = card.suit;
     let rank = card.rank;
@@ -47,7 +81,7 @@ export function CardProp({ card }: { card: Card }) {
     const cardColor = (suit === "Hearts" || suit === "Diamonds") ? "text-red-600" : "text-black";
 
   return (
-    <div 
+    <div
       className={`relative flex flex-col items-center justify-center w-20 h-28 border border-gray-400 rounded-md shadow-md bg-white ${cardColor}`}>
       <div className="absolute top-1 left-1 text-xl font-bold">{rank}</div>
       <div className="text-4xl">{getSuitSymbol(suit)}</div>
