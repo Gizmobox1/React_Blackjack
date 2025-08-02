@@ -9,7 +9,11 @@ export function PlayerProp({player} : {player: Player}) {
 
   const cardAnimVariants ={
     initial: { opacity: 0, scale: 2, x: 100 },
-    animate: { opacity: 1, scale: 1, x: 0 },
+    animate: { opacity: 1, scale: 1, x: 0,},
+  }
+
+  const handAnimVariants ={
+    animate: { transition: { staggerChildren: 0.2 } }
   }
 
   return (
@@ -18,11 +22,7 @@ export function PlayerProp({player} : {player: Player}) {
       
         <motion.div
           className="flex flex-row -space-x-6"
-          variants={{
-            animate: { transition: { staggerChildren: 0.2 } }
-          }}
-          initial="initial"
-          animate="animate"
+          variants={handAnimVariants}
         >
           {player.hand.map((card, index) => (
             <motion.div
@@ -41,37 +41,6 @@ export function PlayerProp({player} : {player: Player}) {
         <h3>({player.score}) {player.isBlackjack ? "- Blackjack!" : " "}{player.isBust ? "- Bust!" : " "}</h3>
     </div>
   );
-}
-
-export function HandProp({ hand }: { hand: Card[] }) {
-
-  const handVariants = {
-    animate: { transition: { staggerChildren: 0.2 } },
-  }
-
-  const cardVariants ={
-    initial: {opacity: 0, scale: 2, x: 100},
-    animate: {opacity: 1, scale: 1, x: 0, transition: {duration: 0.4, scale: {type: "tween", visualDuration: 0.4}}},
-  }
-
-  return (
-    <motion.div
-      className="flex flex-row -space-x-6"
-      variants={handVariants}
-      initial="initial"
-      animate="animate"
-      >
-        {hand.map((card, index) => (
-          <motion.div
-            key={index}
-            variants={cardVariants}
-          >
-            <CardProp card={card} />
-          </motion.div>
-        ))}
-    </motion.div> 
-  )  
-
 }
 
 export function CardProp({ card }: { card: Card }) {

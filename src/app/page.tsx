@@ -3,12 +3,9 @@
 import React, { useState } from 'react';
 import { Card } from "@/scripts/cardDeck";
 import { Game, GameState, Player } from "@/scripts/gameLogic";
-import { PlayerProp, HandProp} from "../components/ui/blackjackComponents";
+import { PlayerProp} from "../components/ui/blackjackComponents";
 import Button from '@mui/material/Button';
-
 import { motion } from "motion/react"
-import { ClassNames } from '@emotion/react';
-import {Variants} from '@/components/ui/motionExamples';
 
 export default function page () {
 
@@ -29,17 +26,13 @@ export default function page () {
 
   function handleStartGame () {
 
-    game.gameState="init";
-    setGameState(game.gameState);
-
     game.resetGame();
     game.roundNumber++;
-
 
     game.gameState = "playerTurn";
     setGameState(game.gameState);
 
-    //Deal initial 2 cards to each player (Animations only work properly when run asynchronously!?)
+    //Deal initial 2 cards to each player (Animations only work properly when the draw and state update run asynchronously!?)
     setTimeout(() => {
     mainPlayer.drawCards(game.deck,2);
     dealer.drawCards(game.deck,2);
@@ -76,21 +69,18 @@ export default function page () {
 
       {game.gameState !== "init" && <h3 className='font-bold underline'>Round {game.roundNumber}</h3>}  
 
-      #PlayerProp
-      <div className="flex flex-row items-center justify-center space-x-8">
-        {game.dealer.hand.length > 0 && (<PlayerProp player={dealer} />)}
+      <motion.div 
+      className="flex flex-row items-center justify-center space-x-8"
+      initial="initial"
+      animate="animate"
+      >
+        {game.dealer.hand.length > 0 && (<PlayerProp player={dealer}/>)}
         {mainPlayer.hand.length > 0 && (<PlayerProp player={mainPlayer}/>)}
+      </motion.div>
+
+      <div className='mt-2 mb-2'>
+        {message()}
       </div>
-
-      #HandProp
-      <div className="flex flex-row items-center justify-center space-x-8">
-        <HandProp hand={dealerHand} />
-        <HandProp hand={playerHand} />
-      </div>
-
-      {/* <Variants /> */}
-
-      {message()}
 
       <div className="flex flex-row items-center justify-center gap-x-4">
         {game.gameState === "playerTurn" && (
@@ -108,11 +98,9 @@ export default function page () {
           <Button variant='contained' onClick={handleStartGame} className="">Play Again</Button>
           </div>
         )}
-
       </div>
 
       {game.gameState !== "init" && <Button onClick={handleResetGame} className="">Reset</Button>}
-
 
     </div>
   )
