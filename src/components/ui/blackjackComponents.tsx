@@ -1,3 +1,4 @@
+"use client"
 
 import { Card } from "@/scripts/Blackjack Game/cardDeck";
 import { Player } from "@/scripts/Blackjack Game/gameLogic";
